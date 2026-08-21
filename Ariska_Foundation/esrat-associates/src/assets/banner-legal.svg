@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 700" fill="none">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D1B2A"/>
+      <stop offset="60%" style="stop-color:#0f2236"/>
+      <stop offset="100%" style="stop-color:#1a3a5c"/>
+    </linearGradient>
+    <linearGradient id="gold1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#C9A84C"/>
+      <stop offset="100%" style="stop-color:#E8C97A"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="75%" cy="50%" r="40%">
+      <stop offset="0%" style="stop-color:#C9A84C;stop-opacity:0.12"/>
+      <stop offset="100%" style="stop-color:#C9A84C;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1440" height="700" fill="url(#bg1)"/>
+  <rect width="1440" height="700" fill="url(#glow)"/>
+
+  <!-- Dot grid pattern -->
+  <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+    <circle cx="20" cy="20" r="1" fill="#C9A84C" opacity="0.08"/>
+  </pattern>
+  <rect width="1440" height="700" fill="url(#dots)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="1100" cy="350" r="300" stroke="#C9A84C" stroke-width="1" opacity="0.08" fill="none"/>
+  <circle cx="1100" cy="350" r="220" stroke="#C9A84C" stroke-width="1" opacity="0.1" fill="none"/>
+  <circle cx="1100" cy="350" r="140" stroke="#C9A84C" stroke-width="1" opacity="0.12" fill="none"/>
+
+  <!-- Scale of Justice illustration (right side) -->
+  <g transform="translate(960, 150)" opacity="0.18">
+    <!-- Pillar base -->
+    <rect x="190" y="370" width="140" height="16" rx="4" fill="#C9A84C"/>
+    <rect x="253" y="60" width="14" height="310" rx="4" fill="#C9A84C"/>
+    <!-- Scale arm -->
+    <rect x="60" y="80" width="400" height="10" rx="5" fill="#C9A84C"/>
+    <!-- Left chain -->
+    <rect x="105" y="90" width="6" height="120" rx="3" fill="#C9A84C"/>
+    <!-- Right chain -->
+    <rect x="409" y="90" width="6" height="100" rx="3" fill="#C9A84C"/>
+    <!-- Left pan -->
+    <path d="M40 210 Q108 240 175 210" stroke="#C9A84C" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <!-- Right pan -->
+    <path d="M360 190 Q414 220 466 190" stroke="#C9A84C" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <!-- Balance point -->
+    <circle cx="260" cy="60" r="18" fill="#C9A84C"/>
+    <!-- Top ornament -->
+    <circle cx="260" cy="30" r="12" fill="#C9A84C" opacity="0.7"/>
+  </g>
+
+  <!-- Horizontal accent line -->
+  <line x1="80" y1="520" x2="600" y2="520" stroke="#C9A84C" stroke-width="1" opacity="0.3"/>
+  <rect x="80" y="516" width="60" height="3" rx="2" fill="url(#gold1)"/>
+
+  <!-- Geometric corner accents -->
+  <line x1="0" y1="0" x2="200" y2="0" stroke="#C9A84C" stroke-width="3" opacity="0.4"/>
+  <line x1="0" y1="0" x2="0" y2="200" stroke="#C9A84C" stroke-width="3" opacity="0.4"/>
+  <line x1="1440" y1="700" x2="1240" y2="700" stroke="#C9A84C" stroke-width="3" opacity="0.4"/>
+  <line x1="1440" y1="700" x2="1440" y2="500" stroke="#C9A84C" stroke-width="3" opacity="0.4"/>
+</svg>

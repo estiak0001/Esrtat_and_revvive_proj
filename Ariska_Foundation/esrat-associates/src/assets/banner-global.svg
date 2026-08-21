@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 700" fill="none">
+  <defs>
+    <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D1B2A"/>
+      <stop offset="55%" style="stop-color:#0e2035"/>
+      <stop offset="100%" style="stop-color:#192e46"/>
+    </linearGradient>
+    <radialGradient id="glow4" cx="68%" cy="50%" r="42%">
+      <stop offset="0%" style="stop-color:#C9A84C;stop-opacity:0.14"/>
+      <stop offset="100%" style="stop-color:#C9A84C;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1440" height="700" fill="url(#bg4)"/>
+  <rect width="1440" height="700" fill="url(#glow4)"/>
+
+  <!-- Hex pattern -->
+  <pattern id="hex" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+    <circle cx="25" cy="25" r="1.5" fill="#C9A84C" opacity="0.07"/>
+  </pattern>
+  <rect width="1440" height="700" fill="url(#hex)"/>
+
+  <!-- Globe illustration (right side) -->
+  <g transform="translate(900, 100)" opacity="0.18">
+    <!-- Globe circle -->
+    <circle cx="250" cy="250" r="240" stroke="#C9A84C" stroke-width="3" fill="none"/>
+    <!-- Equator -->
+    <ellipse cx="250" cy="250" rx="240" ry="80" stroke="#C9A84C" stroke-width="2" fill="none"/>
+    <!-- Tropics -->
+    <ellipse cx="250" cy="250" rx="240" ry="150" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+    <ellipse cx="250" cy="250" rx="240" ry="210" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+    <!-- Meridians -->
+    <ellipse cx="250" cy="250" rx="80" ry="240" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+    <ellipse cx="250" cy="250" rx="150" ry="240" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+    <ellipse cx="250" cy="250" rx="210" ry="240" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+    <!-- Pole lines -->
+    <line x1="250" y1="10" x2="250" y2="490" stroke="#C9A84C" stroke-width="2"/>
+    <line x1="10" y1="250" x2="490" y2="250" stroke="#C9A84C" stroke-width="2"/>
+    <!-- Stand -->
+    <ellipse cx="250" cy="510" rx="80" ry="16" stroke="#C9A84C" stroke-width="2.5" fill="none"/>
+    <line x1="250" y1="490" x2="250" y2="510" stroke="#C9A84C" stroke-width="3"/>
+    <!-- Location pins -->
+    <circle cx="310" cy="200" r="10" fill="#C9A84C" opacity="0.8"/>
+    <path d="M310 210 L310 240" stroke="#C9A84C" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="190" cy="290" r="8" fill="#C9A84C" opacity="0.6"/>
+    <path d="M190 298 L190 320" stroke="#C9A84C" stroke-width="2" stroke-linecap="round"/>
+    <!-- Document -->
+    <rect x="-40" y="180" width="110" height="140" rx="8" stroke="#C9A84C" stroke-width="3" fill="none"/>
+    <line x1="-20" y1="220" x2="50" y2="220" stroke="#C9A84C" stroke-width="2" stroke-linecap="round"/>
+    <line x1="-20" y1="245" x2="50" y2="245" stroke="#C9A84C" stroke-width="2" stroke-linecap="round"/>
+    <line x1="-20" y1="270" x2="30" y2="270" stroke="#C9A84C" stroke-width="2" stroke-linecap="round"/>
+    <!-- Stamp circle on doc -->
+    <circle cx="40" cy="295" r="20" stroke="#C9A84C" stroke-width="2" fill="none"/>
+    <path d="M28 295 L36 303 L52 287" stroke="#C9A84C" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Corner accents -->
+  <line x1="0" y1="0" x2="200" y2="0" stroke="#C9A84C" stroke-width="3" opacity="0.4"/>
+  <line x1="0" y1="0" x2="0" y2="200" stroke="#C9A84C" stroke-width="3" opacity="0.4"/>
+  <line x1="1440" y1="700" x2="1240" y2="700" stroke="#C9A84C" stroke-width="3" opacity="0.4"/>
+  <line x1="1440" y1="700" x2="1440" y2="500" stroke="#C9A84C" stroke-width="3" opacity="0.4"/>
+  <rect x="80" y="516" width="60" height="3" rx="2" fill="#C9A84C"/>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 700" fill="none">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D1B2A"/>
+      <stop offset="50%" style="stop-color:#111f30"/>
+      <stop offset="100%" style="stop-color:#0e2640"/>
+    </linearGradient>
+    <radialGradient id="glow2" cx="70%" cy="55%" r="40%">
+      <stop offset="0%" style="stop-color:#C9A84C;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#C9A84C;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1440" height="700" fill="url(#bg2)"/>
+  <rect width="1440" height="700" fill="url(#glow2)"/>
+
+  <!-- Grid lines -->
+  <pattern id="grid" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.15"/>
+  </pattern>
+  <rect width="1440" height="700" fill="url(#grid)"/>
+
+  <!-- Building / Property illustration (right side) -->
+  <g transform="translate(850, 80)" opacity="0.2">
+    <!-- Main building -->
+    <rect x="120" y="160" width="240" height="340" rx="4" fill="none" stroke="#C9A84C" stroke-width="4"/>
+    <!-- Roof peak -->
+    <path d="M80 160 L240 60 L400 160 Z" stroke="#C9A84C" stroke-width="4" fill="none" stroke-linejoin="round"/>
+    <!-- Door -->
+    <rect x="200" y="400" width="80" height="100" rx="4" stroke="#C9A84C" stroke-width="3" fill="none"/>
+    <circle cx="272" cy="452" r="5" fill="#C9A84C"/>
+    <!-- Windows row 1 -->
+    <rect x="150" y="200" width="60" height="50" rx="3" stroke="#C9A84C" stroke-width="2.5" fill="none"/>
+    <rect x="270" y="200" width="60" height="50" rx="3" stroke="#C9A84C" stroke-width="2.5" fill="none"/>
+    <!-- Windows row 2 -->
+    <rect x="150" y="285" width="60" height="50" rx="3" stroke="#C9A84C" stroke-width="2.5" fill="none"/>
+    <rect x="270" y="285" width="60" height="50" rx="3" stroke="#C9A84C" stroke-width="2.5" fill="none"/>
+    <!-- Windows row 3 -->
+    <rect x="150" y="370" width="60" height="50" rx="3" stroke="#C9A84C" stroke-width="2.5" fill="none"/>
+    <!-- Ground -->
+    <line x1="20" y1="500" x2="460" y2="500" stroke="#C9A84C" stroke-width="3"/>
+    <!-- Tree left -->
+    <circle cx="60" cy="420" r="40" stroke="#C9A84C" stroke-width="3" fill="none"/>
+    <line x1="60" y1="460" x2="60" y2="500" stroke="#C9A84C" stroke-width="3"/>
+    <!-- Tree right -->
+    <circle cx="440" cy="430" r="32" stroke="#C9A84C" stroke-width="3" fill="none"/>
+    <line x1="440" y1="462" x2="440" y2="500" stroke="#C9A84C" stroke-width="3"/>
+    <!-- Chimney -->
+    <rect x="310" y="100" width="24" height="60" rx="2" stroke="#C9A84C" stroke-width="3" fill="none"/>
+  </g>
+
+  <!-- Corner accents -->
+  <line x1="0" y1="0" x2="200" y2="0" stroke="#C9A84C" stroke-width="3" opacity="0.4"/>
+  <line x1="0" y1="0" x2="0" y2="200" stroke="#C9A84C" stroke-width="3" opacity="0.4"/>
+  <line x1="1440" y1="700" x2="1240" y2="700" stroke="#C9A84C" stroke-width="3" opacity="0.4"/>
+  <line x1="1440" y1="700" x2="1440" y2="500" stroke="#C9A84C" stroke-width="3" opacity="0.4"/>
+
+  <!-- Bottom accent -->
+  <rect x="80" y="516" width="60" height="3" rx="2" fill="#C9A84C"/>
+</svg>
