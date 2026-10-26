@@ -27,12 +27,12 @@ Thumbs.db
 *.log
 
 # ── One-off local debug/ops scripts (some embed live server credentials) ──────
-Ariska_Foundation/check_dns.py
-Ariska_Foundation/find_url.py
-Ariska_Foundation/find_url2.py
-Ariska_Foundation/fix_nginx.py
-Ariska_Foundation/fix_uploads_nginx.py
-Ariska_Foundation/reset_admin.py
-Ariska_Foundation/seed_consultants_testimonials.py
-Ariska_Foundation/show_nginx.py
-Ariska_Foundation/write_nginx.py
+esrat-associates/check_dns.py
+esrat-associates/find_url.py
+esrat-associates/find_url2.py
+esrat-associates/fix_nginx.py
+esrat-associates/fix_uploads_nginx.py
+esrat-associates/reset_admin.py
+esrat-associates/seed_consultants_testimonials.py
+esrat-associates/show_nginx.py
+esrat-associates/write_nginx.py

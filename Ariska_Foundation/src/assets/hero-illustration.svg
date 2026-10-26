@@ -1,0 +1,67 @@
+<svg viewBox="0 0 560 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#18685B" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#18685B" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="globeFill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#135047" />
+      <stop offset="100%" stop-color="#0A2E28" />
+    </linearGradient>
+    <linearGradient id="containerA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F0B94D" />
+      <stop offset="100%" stop-color="#CC8A28" />
+    </linearGradient>
+  </defs>
+
+  <circle cx="280" cy="260" r="220" fill="url(#glow)" />
+
+  <!-- Globe -->
+  <circle cx="280" cy="230" r="150" fill="url(#globeFill)" stroke="#F0B94D" stroke-opacity="0.35" stroke-width="1.5" />
+  <ellipse cx="280" cy="230" rx="150" ry="55" stroke="#F0B94D" stroke-opacity="0.3" stroke-width="1" fill="none" />
+  <ellipse cx="280" cy="230" rx="150" ry="110" stroke="#F0B94D" stroke-opacity="0.22" stroke-width="1" fill="none" />
+  <ellipse cx="280" cy="230" rx="70" ry="150" stroke="#F0B94D" stroke-opacity="0.22" stroke-width="1" fill="none" />
+  <line x1="130" y1="230" x2="430" y2="230" stroke="#F0B94D" stroke-opacity="0.25" stroke-width="1" />
+
+  <!-- Trade route nodes -->
+  <g>
+    <!-- Bangladesh (origin) -->
+    <circle cx="280" cy="230" r="6" fill="#F0B94D" />
+    <circle cx="280" cy="230" r="12" stroke="#F0B94D" stroke-width="1.5" fill="none" opacity="0.6">
+      <animate attributeName="r" values="10;22;10" dur="3s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- Indonesia -->
+    <circle cx="360" cy="300" r="5" fill="#ffffff" />
+    <path d="M280 230 Q 330 210 360 300" stroke="#F0B94D" stroke-width="1.5" stroke-dasharray="4 5" fill="none" opacity="0.8" />
+
+    <!-- China -->
+    <circle cx="340" cy="150" r="5" fill="#ffffff" />
+    <path d="M280 230 Q 300 170 340 150" stroke="#F0B94D" stroke-width="1.5" stroke-dasharray="4 5" fill="none" opacity="0.8" />
+
+    <!-- Sri Lanka -->
+    <circle cx="210" cy="280" r="5" fill="#ffffff" />
+    <path d="M280 230 Q 235 250 210 280" stroke="#F0B94D" stroke-width="1.5" stroke-dasharray="4 5" fill="none" opacity="0.8" />
+  </g>
+
+  <!-- Orbit ring -->
+  <circle cx="280" cy="230" r="188" stroke="#F0B94D" stroke-opacity="0.18" stroke-width="1" fill="none" stroke-dasharray="2 6" />
+
+  <!-- Cargo ship -->
+  <g transform="translate(60 380)">
+    <path d="M0 40 L220 40 L200 66 L20 66 Z" fill="#0A2E28" stroke="#F0B94D" stroke-opacity="0.4" />
+    <rect x="30" y="10" width="26" height="30" fill="url(#containerA)" rx="2" />
+    <rect x="60" y="10" width="26" height="30" fill="#135047" rx="2" stroke="#F0B94D" stroke-opacity="0.4" />
+    <rect x="90" y="16" width="26" height="24" fill="url(#containerA)" rx="2" />
+    <rect x="120" y="10" width="26" height="30" fill="#135047" rx="2" stroke="#F0B94D" stroke-opacity="0.4" />
+    <rect x="150" y="16" width="26" height="24" fill="url(#containerA)" rx="2" />
+    <rect x="98" y="-10" width="6" height="22" fill="#F0B94D" opacity="0.8" />
+  </g>
+
+  <!-- Floating dots -->
+  <circle cx="90" cy="120" r="3" fill="#F0B94D" opacity="0.6" />
+  <circle cx="470" cy="150" r="2.5" fill="#ffffff" opacity="0.5" />
+  <circle cx="480" cy="340" r="3" fill="#F0B94D" opacity="0.5" />
+  <circle cx="70" cy="300" r="2.5" fill="#ffffff" opacity="0.4" />
+</svg>
