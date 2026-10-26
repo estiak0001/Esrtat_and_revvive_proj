@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion'
-import { CheckCircle2, Award, Globe2, Users, Handshake } from 'lucide-react'
+import { CheckCircle2, Award, Globe2, Users, Handshake, User, Shield, BadgeCheck, Briefcase, Target } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import SectionHeading from '../components/SectionHeading'
 import StatCounter from '../components/StatCounter'
 import GridBackdrop from '../components/GridBackdrop'
-import { company, journey, mission, vision, teamValues, whyAriska, businessValues } from '../data/content'
+import { useApi, assetUrl } from '../lib/api'
+import { defaultCompany, type Company, type Journey, type MissionPoint, type VisionFuture, type TitleDescription, type TeamMember as TeamMemberType } from '../lib/types'
 import aboutStoryPhoto from '../assets/photos/gallery/about-story.jpg'
 import aboutTeamPhoto from '../assets/photos/gallery/about-team.jpg'
 
@@ -13,7 +14,50 @@ const fadeUp = {
   show: (i: number) => ({ opacity: 1, y: 0, transition: { duration: 0.5, delay: i * 0.06 } }),
 }
 
+// Icons & colors indexed to match teamValues order: Integrity, Reliability, Professionalism, Commitment, Partnership
+const teamValueIcons = [Shield, BadgeCheck, Briefcase, Target, Handshake]
+const teamValueColors = ['bg-teal-700', 'bg-amber-500', 'bg-sky-500', 'bg-emerald-500', 'bg-violet-500']
+
+function TeamMemberCard({ member, index = 0 }: { member: TeamMemberType; index?: number }) {
+  return (
+    <motion.div
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.4 }}
+      custom={index}
+      className="flex flex-col items-center text-center rounded-2xl border border-teal-900/10 bg-white p-6 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all"
+    >
+      {member.photo_url ? (
+        <img
+          src={assetUrl(member.photo_url)}
+          alt={member.name}
+          className="h-28 w-28 sm:h-32 sm:w-32 rounded-full object-cover ring-4 ring-white shadow-lg mb-4"
+          draggable={false}
+        />
+      ) : (
+        <div
+          className={`h-28 w-28 sm:h-32 sm:w-32 rounded-full flex items-center justify-center ring-4 ring-white shadow-lg mb-4 ${member.color}`}
+        >
+          <User size={52} className="text-white/90" strokeWidth={1.5} />
+        </div>
+      )}
+      <p className="font-display font-semibold text-base text-teal-950">{member.name}</p>
+      <p className="text-xs text-teal-900/60 mt-1">{member.role}</p>
+    </motion.div>
+  )
+}
+
 export default function About() {
+  const { data: company } = useApi<Company>('/api/company', defaultCompany)
+  const { data: journey } = useApi<Journey[]>('/api/content/journey', [])
+  const { data: missionPoints } = useApi<MissionPoint[]>('/api/content/mission-points', [])
+  const { data: visionFuture } = useApi<VisionFuture[]>('/api/content/vision-future', [])
+  const { data: teamValues } = useApi<TitleDescription[]>('/api/content/team-values', [])
+  const { data: whyAriska } = useApi<TitleDescription[]>('/api/content/why-ariska', [])
+  const { data: businessValues } = useApi<TitleDescription[]>('/api/content/business-values', [])
+  const { data: teamMembers } = useApi<TeamMemberType[]>('/api/content/team-members', [])
+
   return (
     <div>
       <PageHero
@@ -108,12 +152,12 @@ export default function About() {
 
       {/* Mission */}
       <section className="max-w-6xl mx-auto px-5 sm:px-8 py-20 md:py-24">
-        <SectionHeading eyebrow="Our Mission" title={mission.heading} subtitle={mission.intro} />
+        <SectionHeading eyebrow="Our Mission" title={company.mission_heading} subtitle={company.mission_intro} />
         <div className="grid sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
-          {mission.points.map((point) => (
-            <div key={point} className="flex items-start gap-3 rounded-xl bg-teal-700/[0.03] border border-teal-900/10 p-4">
+          {missionPoints.map((point) => (
+            <div key={point.text} className="flex items-start gap-3 rounded-xl bg-teal-700/[0.03] border border-teal-900/10 p-4">
               <CheckCircle2 size={20} className="text-amber-500 shrink-0 mt-0.5" />
-              <span className="text-sm text-teal-900/80 leading-relaxed">{point}</span>
+              <span className="text-sm text-teal-900/80 leading-relaxed">{point.text}</span>
             </div>
           ))}
         </div>
@@ -123,12 +167,12 @@ export default function About() {
       <section className="relative overflow-hidden bg-teal-700 text-white">
         <GridBackdrop />
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 md:py-24">
-          <SectionHeading eyebrow="Our Vision" title={vision.heading} subtitle={vision.intro} light />
+          <SectionHeading eyebrow="Our Vision" title={company.vision_heading} subtitle={company.vision_intro} light />
           <p className="text-center text-white/60 max-w-2xl mx-auto -mt-6 mb-12 text-sm leading-relaxed">
-            {vision.sub}
+            {company.vision_sub}
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {vision.future.map((item, i) => (
+            {visionFuture.map((item, i) => (
               <motion.div
                 key={item.title}
                 variants={fadeUp}
@@ -195,21 +239,52 @@ export default function About() {
           </motion.div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
-          {teamValues.map((v, i) => (
-            <motion.div
-              key={v.title}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.4 }}
-              custom={i}
-              className="rounded-2xl border border-teal-900/10 p-6 text-center hover:shadow-lg transition-shadow"
-            >
-              <h4 className="font-display font-semibold text-teal-950">{v.title}</h4>
-              <p className="mt-2 text-sm text-teal-900/70 leading-relaxed">{v.description}</p>
-            </motion.div>
-          ))}
+        {teamMembers.length > 4 ? (
+          <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] mb-14">
+            <div className="flex w-max gap-4 animate-marquee hover:[animation-play-state:paused]">
+              {[...teamMembers, ...teamMembers].map((member, i) => (
+                <div key={`${member.name}-${i}`} className="w-52 shrink-0">
+                  <TeamMemberCard member={member} index={i % teamMembers.length} />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
+            {teamMembers.map((member, i) => (
+              <TeamMemberCard key={member.name} member={member} index={i} />
+            ))}
+          </div>
+        )}
+
+        <p className="text-center font-display font-semibold text-teal-950 mb-8">Team Values</p>
+        <div className="relative">
+          <div className="hidden lg:block absolute top-9 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-teal-900/15 to-transparent" />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            {teamValues.map((v, i) => {
+              const Icon = teamValueIcons[i]
+              const accent = teamValueColors[i]
+              return (
+                <motion.div
+                  key={v.title}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.4 }}
+                  custom={i}
+                  className="relative flex flex-col items-center text-center"
+                >
+                  <div
+                    className={`relative z-10 h-14 w-14 rounded-2xl flex items-center justify-center mb-4 rotate-3 hover:rotate-0 transition-transform shadow-md ${accent}`}
+                  >
+                    <Icon size={24} className="text-white" strokeWidth={2} />
+                  </div>
+                  <h4 className="font-display font-semibold text-teal-950">{v.title}</h4>
+                  <p className="mt-2 text-sm text-teal-900/70 leading-relaxed">{v.description}</p>
+                </motion.div>
+              )
+            })}
+          </div>
         </div>
       </section>
 
@@ -237,26 +312,30 @@ export default function About() {
       </section>
 
       {/* Business values */}
-      <section className="max-w-6xl mx-auto px-5 sm:px-8 py-20 md:py-24">
-        <SectionHeading eyebrow="Our Business Values" title="What We Believe In" />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
-          {businessValues.map((v, i) => (
-            <motion.div
-              key={v.title}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.4 }}
-              custom={i}
-              className="text-center"
-            >
-              <div className="mx-auto h-14 w-14 rounded-full bg-teal-700 flex items-center justify-center text-amber-400 font-display font-bold text-lg mb-4">
-                {v.title.charAt(0)}
-              </div>
-              <h4 className="font-display font-semibold text-teal-950">{v.title}</h4>
-              <p className="mt-2 text-sm text-teal-900/70 leading-relaxed">{v.description}</p>
-            </motion.div>
-          ))}
+      <section className="bg-teal-950/[0.03]">
+        <div className="max-w-4xl mx-auto px-5 sm:px-8 py-20 md:py-24">
+          <SectionHeading eyebrow="Our Business Values" title="What We Believe In" />
+          <div className="border-t border-teal-900/10">
+            {businessValues.map((v, i) => (
+              <motion.div
+                key={v.title}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.4 }}
+                custom={i}
+                className="group flex items-center gap-5 sm:gap-8 py-6 border-b border-teal-900/10"
+              >
+                <span className="font-display text-4xl sm:text-5xl font-bold text-teal-900/10 group-hover:text-amber-500/30 transition-colors w-14 sm:w-20 shrink-0 text-center">
+                  0{i + 1}
+                </span>
+                <div className="min-w-0">
+                  <h4 className="font-display font-semibold text-teal-950 text-base sm:text-lg">{v.title}</h4>
+                  <p className="mt-1 text-sm text-teal-900/70 leading-relaxed">{v.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

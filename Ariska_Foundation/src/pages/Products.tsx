@@ -1,66 +1,39 @@
+import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Images } from 'lucide-react'
 import PageHero from '../components/PageHero'
-import SectionHeading from '../components/SectionHeading'
 import GridBackdrop from '../components/GridBackdrop'
-import { services } from '../data/content'
-import pineapplePhoto from '../assets/photos/agro/pineapple.jpg'
-import dragonfruitPhoto from '../assets/photos/agro/dragonfruit.jpg'
-import bananaPhoto from '../assets/photos/agro/banana.jpg'
-import papayaPhoto from '../assets/photos/agro/papaya.jpg'
-import guavaPhoto from '../assets/photos/agro/guava.jpg'
-import rubberPhoto from '../assets/photos/gallery/rubber-tapping.jpg'
-import leatherPhoto from '../assets/photos/products/leather.jpg'
-import rawMaterialsPhoto from '../assets/photos/products/rawmaterials.jpg'
-import aboutStoryPhoto from '../assets/photos/gallery/about-story.jpg'
-import warehousePhoto from '../assets/photos/gallery/warehouse-worker.jpg'
-import residentialPhoto from '../assets/photos/products/residential.jpg'
-import exportPackagingPhoto from '../assets/photos/gallery/export-packaging.jpg'
-import printingPhoto from '../assets/photos/gallery/printing-press.jpg'
-import finePaperPhoto from '../assets/photos/products/finepaper.jpg'
-
-const supplyService = services.find((s) => s.slug === 'supply-procurement')!
-const printingService = services.find((s) => s.slug === 'printing-packaging')!
-const exportService = services.find((s) => s.slug === 'export-trading')!
-const agroService = services.find((s) => s.slug === 'agro')!
-
-const exportCommodities = exportService.groups.find((g) => g.heading === 'Commodity Exports')!.items
-const exportPhotos = [rubberPhoto, leatherPhoto]
-
-const localTrading = exportService.groups.find((g) => g.heading === 'Local Trading & Wholesale')!.items
-const localTradingPhotos = [leatherPhoto, rawMaterialsPhoto]
-
-const supplyItems = supplyService.groups[0].items
-const supplyPhotos = [aboutStoryPhoto, warehousePhoto, residentialPhoto]
-
-const printingGroupPhotos: Record<string, string> = {
-  'Industrial & Commercial Packaging': exportPackagingPhoto,
-  'Corporate & Commercial Printing Services': printingPhoto,
-  'Paper Import & Raw Material Trading': finePaperPhoto,
-}
-
-const agroFruits = agroService.groups.find((g) => g.heading === 'Fresh Produce Portfolio')!.items
-const agroPhotos = [pineapplePhoto, dragonfruitPhoto, bananaPhoto, papayaPhoto, guavaPhoto]
+import { useApi, assetUrl } from '../lib/api'
+import type { Product } from '../lib/types'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  show: (i: number) => ({ opacity: 1, y: 0, transition: { duration: 0.5, delay: i * 0.06 } }),
+  show: (i: number) => ({ opacity: 1, y: 0, transition: { duration: 0.5, delay: Math.min(i, 6) * 0.07 } }),
 }
 
-function ImageTile({
-  src,
-  title,
-  description,
-  index = 0,
-  aspect = 'aspect-[3/4]',
-}: {
-  src: string
-  title: string
-  description: string
-  index?: number
-  aspect?: string
-}) {
+const categoryAccents = ['amber', 'sky', 'emerald', 'violet', 'rose'] as const
+type Accent = (typeof categoryAccents)[number]
+
+const accentClasses: Record<Accent, { badge: string; glow: string; text: string }> = {
+  amber: { badge: 'bg-amber-500/90 text-teal-950', glow: 'from-amber-400/30', text: 'text-amber-600' },
+  sky: { badge: 'bg-sky-500/90 text-white', glow: 'from-sky-400/30', text: 'text-sky-600' },
+  emerald: { badge: 'bg-emerald-500/90 text-white', glow: 'from-emerald-400/30', text: 'text-emerald-600' },
+  violet: { badge: 'bg-violet-500/90 text-white', glow: 'from-violet-400/30', text: 'text-violet-600' },
+  rose: { badge: 'bg-rose-500/90 text-white', glow: 'from-rose-400/30', text: 'text-rose-600' },
+}
+
+function groupByCategory(products: Product[]) {
+  const map = new Map<string, Product[]>()
+  for (const p of products) {
+    const key = p.category || 'Other'
+    if (!map.has(key)) map.set(key, [])
+    map.get(key)!.push(p)
+  }
+  return Array.from(map.entries())
+}
+
+function ProductTile({ product, accent, index, aspect = 'aspect-[4/5]' }: { product: Product; accent: Accent; index: number; aspect?: string }) {
   return (
     <motion.div
       variants={fadeUp}
@@ -68,19 +41,111 @@ function ImageTile({
       whileInView="show"
       viewport={{ once: true, amount: 0.3 }}
       custom={index}
-      className={`group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${aspect}`}
     >
-      <img src={src} alt={title} className="absolute inset-0 w-full h-full object-cover select-none" draggable={false} />
-      <div className="absolute inset-0 bg-gradient-to-t from-teal-950/90 via-teal-950/20 to-transparent" />
-      <div className="relative h-full flex flex-col justify-end p-4">
-        <h3 className="font-display text-sm font-bold text-white leading-snug">{title}</h3>
-        <p className="mt-1 text-[11px] text-white/70 leading-relaxed">{description}</p>
-      </div>
+      <Link
+        to={`/products/${product.slug}`}
+        className={`group relative block overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 ${aspect}`}
+      >
+        {product.images[0] ? (
+          <img
+            src={assetUrl(product.images[0])}
+            alt={product.title}
+            className="absolute inset-0 w-full h-full object-cover select-none group-hover:scale-110 transition-transform duration-700 ease-out"
+            draggable={false}
+          />
+        ) : (
+          <div className="absolute inset-0 bg-teal-900/10" />
+        )}
+
+        <div className="absolute inset-0 bg-gradient-to-t from-teal-950/95 via-teal-950/20 to-transparent" />
+        <div
+          className={`absolute inset-0 bg-gradient-to-t ${accentClasses[accent].glow} via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+        />
+
+        {product.images.length > 1 && (
+          <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-white/90 text-teal-950 text-[11px] font-semibold px-2.5 py-1 shadow-md">
+            <Images size={11} /> {product.images.length}
+          </span>
+        )}
+
+        <div className="relative h-full flex flex-col justify-end p-5">
+          <h3 className="font-display text-base font-bold text-white leading-snug drop-shadow-sm">
+            {product.title}
+          </h3>
+          <p className="mt-2 text-xs text-white/80 leading-relaxed line-clamp-2 max-h-0 opacity-0 group-hover:max-h-16 group-hover:opacity-100 transition-all duration-300 overflow-hidden">
+            {product.summary}
+          </p>
+          <span className="mt-2.5 inline-flex items-center gap-1.5 text-amber-400 text-xs font-semibold group-hover:gap-2.5 transition-all">
+            View Details <ArrowRight size={13} />
+          </span>
+        </div>
+      </Link>
     </motion.div>
   )
 }
 
+/** Alternating layout A — one featured product + the rest in a tight grid */
+function FeaturedSection({ items, accent }: { items: Product[]; accent: Accent }) {
+  const [featured, ...rest] = items
+  return (
+    <div className="grid lg:grid-cols-5 gap-6">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6 }}
+        className="lg:col-span-2"
+      >
+        <Link to={`/products/${featured.slug}`} className="group relative block overflow-hidden rounded-3xl shadow-xl aspect-[4/5] lg:aspect-auto lg:h-full lg:min-h-[22rem]">
+          {featured.images[0] ? (
+            <img
+              src={assetUrl(featured.images[0])}
+              alt={featured.title}
+              className="absolute inset-0 w-full h-full object-cover select-none group-hover:scale-105 transition-transform duration-700 ease-out"
+              draggable={false}
+            />
+          ) : (
+            <div className="absolute inset-0 bg-teal-900/10" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-teal-950/95 via-teal-950/25 to-transparent" />
+          <div className="relative h-full flex flex-col justify-end p-6">
+            <span className={`self-start mb-3 rounded-full text-[11px] font-bold uppercase tracking-wide px-3 py-1 shadow-md ${accentClasses[accent].badge}`}>
+              Featured
+            </span>
+            <h3 className="font-display text-xl font-bold text-white leading-snug">{featured.title}</h3>
+            <p className="mt-2 text-sm text-white/80 leading-relaxed">{featured.summary}</p>
+            <span className="mt-4 inline-flex items-center gap-1.5 text-amber-400 text-sm font-semibold group-hover:gap-2.5 transition-all">
+              View Details <ArrowRight size={15} />
+            </span>
+          </div>
+        </Link>
+      </motion.div>
+
+      <div className="lg:col-span-3 grid sm:grid-cols-2 gap-5">
+        {rest.map((product, i) => (
+          <ProductTile key={product.slug} product={product} accent={accent} index={i} aspect="aspect-[4/3]" />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/** Alternating layout B — uniform grid of image tiles */
+function GridSection({ items, accent }: { items: Product[]; accent: Accent }) {
+  return (
+    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {items.map((product, i) => (
+        <ProductTile key={product.slug} product={product} accent={accent} index={i} />
+      ))}
+    </div>
+  )
+}
+
 export default function Products() {
+  const { data: products } = useApi<Product[]>('/api/products', [])
+
+  const groups = useMemo(() => groupByCategory(products), [products])
+
   return (
     <div>
       <PageHero
@@ -89,113 +154,45 @@ export default function Products() {
         subtitle="A look at the goods ARISKA works with across procurement, printing, export, and agro production — shared here for reference, not for direct sale. For pricing, availability, or sourcing requests, please contact our team."
       />
 
-      {/* Agro & Fresh Produce */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-16 md:py-20">
-        <SectionHeading
-          eyebrow="Agro &amp; Fresh Produce"
-          title="Fresh From Modhupur, Tangail"
-          subtitle="Large-scale commercial farming and bulk wholesale supply operating across 100+ acres of agricultural land in Modhupur, Tangail — the Pineapple Capital of Bangladesh."
-        />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
-          {agroFruits.map((fruit, i) => (
-            <ImageTile key={fruit.title} src={agroPhotos[i]} title={fruit.title} description={fruit.description} index={i} />
-          ))}
-        </div>
-      </section>
+      {groups.map(([category, items], idx) => {
+        const accent = categoryAccents[idx % categoryAccents.length]
+        const alternate = idx % 2 === 1
 
-      {/* Export & commodity trading */}
-      <section className="bg-teal-950/[0.03] py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8">
-          <SectionHeading eyebrow="Commodity Exports" title="From Bangladesh to the World" subtitle={exportService.intro} />
-          <div className="grid sm:grid-cols-2 gap-5 max-w-3xl mx-auto mb-10">
-            {exportCommodities.map((product, i) => (
-              <ImageTile
-                key={product.title}
-                src={exportPhotos[i]}
-                title={product.title}
-                description={product.description}
-                index={i}
-                aspect="aspect-[4/3]"
-              />
-            ))}
-          </div>
-
-          <p className="text-center text-xs font-semibold uppercase tracking-wider text-amber-600 mb-4">
-            Local Trading &amp; Wholesale
-          </p>
-          <div className="grid sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
-            {localTrading.map((item, i) => (
-              <ImageTile
-                key={item.title}
-                src={localTradingPhotos[i]}
-                title={item.title}
-                description={item.description}
-                index={i}
-                aspect="aspect-[4/3]"
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Supply range */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-16 md:py-20">
-        <SectionHeading eyebrow="Supply &amp; Procurement" title="B2B Supply &amp; Institutional Procurement" subtitle={supplyService.intro} />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {supplyItems.map((item, i) => (
-            <ImageTile
-              key={item.title}
-              src={supplyPhotos[i]}
-              title={item.title}
-              description={item.description}
-              index={i}
-              aspect="aspect-[4/3]"
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* Printing & packaging range */}
-      <section className="bg-teal-950/[0.03] py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8">
-          <SectionHeading
-            eyebrow="Printing &amp; Packaging"
-            title="Products That Support Your Business"
-            subtitle={printingService.intro}
-          />
-          <div className="grid sm:grid-cols-3 gap-6">
-            {printingService.groups.map((group, i) => (
-              <motion.div
-                key={group.heading}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.3 }}
-                custom={i}
-                className="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 aspect-[4/5]"
-              >
-                <img
-                  src={printingGroupPhotos[group.heading]}
-                  alt={group.heading}
-                  className="absolute inset-0 w-full h-full object-cover select-none"
-                  draggable={false}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-teal-950/95 via-teal-950/50 to-transparent" />
-                <div className="relative h-full flex flex-col justify-end p-5">
-                  <h3 className="font-display text-base font-bold text-white leading-snug">{group.heading}</h3>
-                  <ul className="mt-2 space-y-1">
-                    {group.items.map((item) => (
-                      <li key={item.title} className="text-[11px] text-white/75 leading-relaxed">
-                        {item.title}
-                      </li>
-                    ))}
-                  </ul>
+        return (
+          <section
+            key={category}
+            className={alternate ? 'bg-teal-950/[0.03]' : ''}
+          >
+            <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16 md:py-20">
+              <div className="flex items-center gap-4 mb-10">
+                <span className={`font-display text-4xl sm:text-5xl font-extrabold ${accentClasses[accent].text} opacity-30`}>
+                  0{idx + 1}
+                </span>
+                <div>
+                  <p className={`uppercase tracking-[0.2em] text-xs font-semibold mb-1 ${accentClasses[accent].text}`}>
+                    Product Category
+                  </p>
+                  <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold text-teal-950 leading-snug">
+                    {category}
+                  </h2>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+              </div>
+
+              {items.length >= 2 && !alternate ? (
+                <FeaturedSection items={items} accent={accent} />
+              ) : (
+                <GridSection items={items} accent={accent} />
+              )}
+            </div>
+          </section>
+        )
+      })}
+
+      {groups.length === 0 && (
+        <p className="text-center text-teal-900/50 py-16 max-w-7xl mx-auto px-5 sm:px-8">
+          No products available yet.
+        </p>
+      )}
 
       {/* Closing note + single CTA (no per-product buying actions) */}
       <section className="relative overflow-hidden bg-teal-700 text-white">

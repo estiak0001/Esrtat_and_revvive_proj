@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Phone } from 'lucide-react'
-import { navLinks, company } from '../data/content'
+import { navLinks } from '../lib/nav'
+import { useApi } from '../lib/api'
+import { defaultCompany, type Company } from '../lib/types'
 import wordmarkDark from '../assets/logo/ariska-wordmark-dark.png'
 import wordmarkLight from '../assets/logo/ariska-wordmark-light.png'
 
@@ -14,6 +16,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
+  const { data: company } = useApi<Company>('/api/company', defaultCompany)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)

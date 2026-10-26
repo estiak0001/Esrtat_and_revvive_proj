@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
 import PageHero from '../components/PageHero'
 import GridBackdrop from '../components/GridBackdrop'
-import { internationalMarkets } from '../data/content'
+import { useApi } from '../lib/api'
+import type { Market } from '../lib/types'
 import indonesiaPhoto from '../assets/photos/global/indonesia.jpg'
 import chinaPhoto from '../assets/photos/global/china.jpg'
 import sriLankaPhoto from '../assets/photos/global/srilanka.jpg'
@@ -21,6 +22,8 @@ const fadeUp = {
 }
 
 export default function Global() {
+  const { data: internationalMarkets } = useApi<Market[]>('/api/content/markets', [])
+
   return (
     <div>
       <PageHero

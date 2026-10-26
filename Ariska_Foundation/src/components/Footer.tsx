@@ -1,10 +1,16 @@
 import { Link } from 'react-router-dom'
 import { Phone, Globe, MapPin, ArrowRight } from 'lucide-react'
-import { company, navLinks } from '../data/content'
+import { navLinks } from '../lib/nav'
+import { useApi } from '../lib/api'
+import { defaultCompany, type Company, type Pillar, type Market } from '../lib/types'
 import wordmarkLight from '../assets/logo/ariska-wordmark-light.png'
 import GridBackdrop from './GridBackdrop'
 
 export default function Footer() {
+  const { data: company } = useApi<Company>('/api/company', defaultCompany)
+  const { data: pillars } = useApi<Pillar[]>('/api/content/pillars', [])
+  const { data: markets } = useApi<Market[]>('/api/content/markets', [])
+
   return (
     <footer className="relative overflow-hidden bg-teal-950 text-white/70">
       <div className="h-[3px] w-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500" />
@@ -15,7 +21,7 @@ export default function Footer() {
           <img src={wordmarkLight} alt="ARISKA" className="h-7 w-auto select-none" draggable={false} />
           <p className="mt-4 text-amber-400 text-sm font-medium">{company.tagline}</p>
           <p className="mt-3 text-sm leading-relaxed max-w-md text-white/55">
-            {company.pillars.join(' · ')}
+            {pillars.map((p) => p.title).join(' · ')}
           </p>
 
           <div className="mt-6 space-y-3 text-sm">
@@ -69,10 +75,10 @@ export default function Footer() {
             Our Markets
           </h4>
           <ul className="space-y-2.5 text-sm">
-            {company.markets.map((m) => (
-              <li key={m} className="flex items-center gap-2">
+            {markets.map((m) => (
+              <li key={m.country} className="flex items-center gap-2">
                 <span className="h-1 w-1 rounded-full bg-amber-400" />
-                {m}
+                {m.country}
               </li>
             ))}
           </ul>
@@ -82,7 +88,7 @@ export default function Footer() {
       <div className="relative border-t border-white/10">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5 text-xs text-white/40 flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>&copy; {new Date().getFullYear()} {company.name}. All Rights Reserved.</span>
-          <span>Supply &amp; Procurement &middot; Printing &amp; Packaging &middot; Export &amp; Trading &middot; Agro</span>
+          <span>{pillars.map((p) => p.title).join(' · ')}</span>
         </div>
       </div>
     </footer>

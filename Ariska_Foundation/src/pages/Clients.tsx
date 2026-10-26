@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion'
 import { Building2 } from 'lucide-react'
 import PageHero from '../components/PageHero'
-import { clientGroups } from '../data/content'
+import { useApi, assetUrl } from '../lib/api'
+import { groupClientsWithLogos } from '../lib/utils'
+import type { Client } from '../lib/types'
 import beveragePhoto from '../assets/photos/clients/beverage.jpg'
 import marblePhoto from '../assets/photos/clients/marble.jpg'
 import residentialPhoto from '../assets/photos/products/residential.jpg'
@@ -11,6 +13,7 @@ const categoryPhotos: Record<string, string> = {
   'Real Estate & Building Materials': marblePhoto,
   'Institutional Projects': residentialPhoto,
 }
+const fallbackPhoto = marblePhoto
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -18,6 +21,9 @@ const fadeUp = {
 }
 
 export default function Clients() {
+  const { data: clients } = useApi<Client[]>('/api/content/clients', [])
+  const clientGroups = groupClientsWithLogos(clients)
+
   return (
     <div>
       <PageHero
@@ -42,7 +48,7 @@ export default function Clients() {
                 className="lg:col-span-2"
               >
                 <img
-                  src={categoryPhotos[group.category]}
+                  src={categoryPhotos[group.category] ?? fallbackPhoto}
                   alt={group.category}
                   className="w-full aspect-[4/3] object-cover rounded-3xl shadow-xl border border-teal-900/5 select-none"
                   draggable={false}
@@ -54,9 +60,9 @@ export default function Clients() {
                   {group.category}
                 </h3>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {group.names.map((name, i) => (
+                  {group.items.map((client, i) => (
                     <motion.div
-                      key={name}
+                      key={client.name}
                       variants={fadeUp}
                       initial="hidden"
                       whileInView="show"
@@ -64,10 +70,21 @@ export default function Clients() {
                       custom={i}
                       className="flex items-center gap-3 rounded-2xl border border-teal-900/10 bg-white p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all"
                     >
-                      <div className="h-9 w-9 shrink-0 rounded-lg bg-teal-700 flex items-center justify-center">
-                        <Building2 size={16} className="text-amber-400" />
+                      <div className="h-9 w-9 shrink-0 rounded-lg bg-teal-50 border border-teal-900/[0.06] flex items-center justify-center overflow-hidden">
+                        {client.logo_url ? (
+                          <img
+                            src={assetUrl(client.logo_url)}
+                            alt={client.name}
+                            className="h-full w-full object-contain p-0.5"
+                            draggable={false}
+                          />
+                        ) : (
+                          <div className="h-full w-full bg-teal-700 flex items-center justify-center">
+                            <Building2 size={16} className="text-amber-400" />
+                          </div>
+                        )}
                       </div>
-                      <p className="font-display text-sm font-bold text-teal-950 leading-snug">{name}</p>
+                      <p className="font-display text-sm font-bold text-teal-950 leading-snug">{client.name}</p>
                     </motion.div>
                   ))}
                 </div>

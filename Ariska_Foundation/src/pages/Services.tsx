@@ -5,7 +5,8 @@ import PageHero from '../components/PageHero'
 import SectionHeading from '../components/SectionHeading'
 import OfferTimeline from '../components/OfferTimeline'
 import GridBackdrop from '../components/GridBackdrop'
-import { services, whatWeDo } from '../data/content'
+import { useApi } from '../lib/api'
+import type { Service, TitleDescription } from '../lib/types'
 import warehousePhoto from '../assets/photos/gallery/warehouse-worker.jpg'
 import printingPhoto from '../assets/photos/gallery/printing-press.jpg'
 import exportPackagingPhoto from '../assets/photos/gallery/export-packaging.jpg'
@@ -21,6 +22,9 @@ const divisionPhotos: Record<string, string> = {
 }
 
 export default function Services() {
+  const { data: services } = useApi<Service[]>('/api/content/services', [])
+  const { data: whatWeDo } = useApi<TitleDescription[]>('/api/content/what-we-do', [])
+
   return (
     <div>
       <PageHero

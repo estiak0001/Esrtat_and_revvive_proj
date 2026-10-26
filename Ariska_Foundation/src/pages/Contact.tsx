@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Phone, Globe, MapPin, Send, CheckCircle } from 'lucide-react'
 import PageHero from '../components/PageHero'
-import { company } from '../data/content'
+import { useApi } from '../lib/api'
+import { defaultCompany, type Company } from '../lib/types'
 
 export default function Contact() {
+  const { data: company } = useApi<Company>('/api/company', defaultCompany)
   const [submitted, setSubmitted] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {

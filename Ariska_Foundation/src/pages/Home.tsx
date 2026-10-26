@@ -21,7 +21,9 @@ import PartnerMarquee from '../components/PartnerMarquee'
 import OfferFlow from '../components/OfferFlow'
 import HeroBackdrop from '../components/HeroBackdrop'
 import ConnectionsDiagram from '../components/ConnectionsDiagram'
-import { company, whatWeDo, whyAriska, mission } from '../data/content'
+import HighlightsGallery from '../components/HighlightsGallery'
+import { useApi } from '../lib/api'
+import { defaultCompany, type Company, type TitleDescription, type Pillar, type MissionPoint } from '../lib/types'
 import handshakePhoto from '../assets/photos/handshake.jpg'
 import wordmarkLight from '../assets/logo/ariska-wordmark-light.png'
 import printingPhoto from '../assets/photos/gallery/printing-press.jpg'
@@ -64,16 +66,22 @@ const heroStats = [
   { value: '3+ Markets', label: 'International Reach' },
 ]
 
-const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(
-  company.businessAddress,
-)}&output=embed`
-
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   show: (i: number) => ({ opacity: 1, y: 0, transition: { duration: 0.5, delay: i * 0.06 } }),
 }
 
 export default function Home() {
+  const { data: company } = useApi<Company>('/api/company', defaultCompany)
+  const { data: pillars } = useApi<Pillar[]>('/api/content/pillars', [])
+  const { data: whatWeDo } = useApi<TitleDescription[]>('/api/content/what-we-do', [])
+  const { data: whyAriska } = useApi<TitleDescription[]>('/api/content/why-ariska', [])
+  const { data: missionPoints } = useApi<MissionPoint[]>('/api/content/mission-points', [])
+
+  const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(
+    company.businessAddress,
+  )}&output=embed`
+
   return (
     <div>
       {/* Hero / Banner */}
@@ -175,12 +183,12 @@ export default function Home() {
               markets in the future.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-3">
-              {company.pillars.map((pillar) => (
+              {pillars.map((pillar) => (
                 <span
-                  key={pillar}
+                  key={pillar.title}
                   className="px-4 py-1.5 rounded-full bg-teal-700/5 border border-teal-900/10 text-xs font-semibold text-teal-900/80 uppercase tracking-wide"
                 >
-                  {pillar}
+                  {pillar.title}
                 </span>
               ))}
             </div>
@@ -311,14 +319,14 @@ export default function Home() {
               Why Choose Us
             </p>
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-teal-950 leading-snug">
-              {mission.heading}
+              {company.mission_heading}
             </h2>
-            <p className="mt-5 text-teal-900/70 leading-relaxed">{mission.intro}</p>
+            <p className="mt-5 text-teal-900/70 leading-relaxed">{company.mission_intro}</p>
             <div className="mt-7 space-y-3 max-w-lg mx-auto lg:mx-0">
-              {mission.points.map((point) => (
-                <div key={point} className="flex items-start gap-3 text-left">
+              {missionPoints.map((point) => (
+                <div key={point.text} className="flex items-start gap-3 text-left">
                   <CheckCircle2 size={20} className="text-amber-500 shrink-0 mt-0.5" />
-                  <span className="text-sm text-teal-900/80 leading-relaxed">{point}</span>
+                  <span className="text-sm text-teal-900/80 leading-relaxed">{point.text}</span>
                 </div>
               ))}
             </div>
@@ -364,9 +372,21 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Highlights */}
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-16 md:py-20">
+        <SectionHeading
+          eyebrow="Highlights"
+          title="Moments &amp; Milestones"
+          subtitle="A look at recent activity, partnerships, and developments from across ARISKA."
+        />
+        <HighlightsGallery />
+      </section>
+
       {/* Partners */}
-      <section className="py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 text-center mb-12">
+      <section className="relative overflow-hidden bg-gradient-to-b from-amber-50/70 via-white to-white py-16 md:py-20">
+        <div className="pointer-events-none absolute -top-16 left-1/4 h-64 w-64 rounded-full bg-amber-300/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-16 right-1/4 h-64 w-64 rounded-full bg-teal-400/15 blur-3xl" />
+        <div className="relative max-w-7xl mx-auto px-5 sm:px-8 text-center mb-12">
           <p className="text-amber-600 uppercase tracking-[0.2em] text-xs font-semibold mb-3">
             Trusted By
           </p>
@@ -374,7 +394,9 @@ export default function Home() {
             Organizations We&apos;ve Worked With
           </h2>
         </div>
-        <PartnerMarquee />
+        <div className="relative">
+          <PartnerMarquee />
+        </div>
       </section>
 
       {/* Contact */}

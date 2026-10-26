@@ -11,6 +11,16 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.production
+
+# Backend
+backend/venv
+backend/__pycache__
+backend/.env
+backend/ariska.db
+backend/uploads/*
+!backend/uploads/.gitkeep
 
 # Editor directories and files
 .vscode/*

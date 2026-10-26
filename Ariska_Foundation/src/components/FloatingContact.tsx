@@ -1,7 +1,10 @@
 import { Phone } from 'lucide-react'
-import { company } from '../data/content'
+import { useApi } from '../lib/api'
+import { defaultCompany, type Company } from '../lib/types'
 
 export default function FloatingContact() {
+  const { data: company } = useApi<Company>('/api/company', defaultCompany)
+
   return (
     <a
       href={`tel:${company.phone.replace(/[^+\d]/g, '')}`}
